@@ -135,46 +135,52 @@ body::before{
 .hero-s{font-size:13px;color:var(--ink-2);margin-bottom:16px;line-height:1.6}
 .hero-btns{display:flex;gap:10px;flex-wrap:wrap}
 
-/* ---------- 按钮 ---------- */
+/* ---------- 按钮 ----------
+   严格分级，全页只有一种主色（琥珀金）：
+   .btn       主行动，每屏最多一个
+   .btn.sec   次级行动，中性描边，不与主色抢注意力
+   .btn.ghost 低频动作，最弱
+   取消彩色发光(glow)，改用干净阴影与描边            */
 .btn{
-  border:none;cursor:pointer;font-family:inherit;font-weight:800;font-size:14px;
-  padding:12px 22px;border-radius:14px;letter-spacing:.2px;transition:transform .13s,box-shadow .13s,filter .13s;
-  background:linear-gradient(145deg,var(--amber-2),var(--amber-d));color:#2A1B02;
-  box-shadow:0 6px 18px rgba(245,165,36,.26),inset 0 1px 0 rgba(255,255,255,.35);
+  border:1px solid transparent;cursor:pointer;font-family:inherit;font-weight:800;font-size:14px;
+  padding:12px 22px;border-radius:13px;letter-spacing:.2px;
+  transition:transform .13s,background .15s,border-color .15s,color .15s;
+  background:linear-gradient(178deg,var(--amber-2),var(--amber));color:#231703;
+  box-shadow:0 1px 2px rgba(0,0,0,.28);
   display:inline-flex;align-items:center;justify-content:center;gap:7px
 }
-.btn:hover:not(:disabled){filter:brightness(1.06)}
-.btn:active:not(:disabled){transform:translateY(2px) scale(.985)}
+.btn:hover:not(:disabled){background:linear-gradient(178deg,#FFD37E,var(--amber-2))}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn.sec{
+  background:var(--surface-3);color:var(--ink);border-color:var(--line-2);box-shadow:none
+}
+.btn.sec:hover:not(:disabled){background:#2C3B54;border-color:rgba(255,255,255,.20)}
 .btn.ghost{
-  background:var(--surface-3);color:var(--ink);box-shadow:none;border:1px solid var(--line-2)
+  background:transparent;color:var(--ink-2);border-color:var(--line-2);box-shadow:none
 }
-.btn.ghost:hover:not(:disabled){background:#2A374E}
-.btn.mint{
-  background:linear-gradient(145deg,#42E4BB,var(--mint-d));color:#04281F;
-  box-shadow:0 6px 18px rgba(45,212,167,.24),inset 0 1px 0 rgba(255,255,255,.3)
-}
-.btn:disabled{opacity:.38;cursor:not-allowed;box-shadow:none;filter:grayscale(.4)}
+.btn.ghost:hover:not(:disabled){background:var(--surface-3);color:var(--ink)}
+.btn:disabled{opacity:.34;cursor:not-allowed;box-shadow:none}
 .btn .n{
-  background:rgba(0,0,0,.20);padding:1px 8px;border-radius:99px;font-size:12.5px;font-weight:900
+  background:rgba(0,0,0,.16);padding:1px 8px;border-radius:99px;font-size:12.5px;font-weight:900
 }
 
 /* ---------- 统计格 ---------- */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+/* 统计格：统一中性卡片，不做四色彩虹。
+   数字一律用主色系；仅「待复习」这一项在有值时用暖红提示，
+   因为它是唯一需要用户立即行动的指标 */
 .stat{
   padding:14px 8px;text-align:center;border-radius:var(--r-m);
-  background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden
+  background:var(--surface);border:1px solid var(--line);position:relative
 }
-.stat::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;opacity:.85}
-.stat.new::before{background:var(--amber)}
-.stat.due::before{background:var(--rose)}
-.stat.done::before{background:var(--mint)}
-.stat.tot::before{background:var(--violet)}
-.stat-n{font-size:21px;font-weight:900;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.stat-n{
+  font-size:21px;font-weight:900;letter-spacing:-.6px;
+  font-variant-numeric:tabular-nums;color:var(--ink)
+}
 .stat-l{font-size:10.5px;color:var(--ink-3);font-weight:700;margin-top:3px}
 .stat.new .stat-n{color:var(--amber-2)}
-.stat.due .stat-n{color:var(--rose)}
-.stat.done .stat-n{color:var(--mint)}
-.stat.tot .stat-n{color:var(--violet)}
+.stat.due.has .stat-n{color:var(--rose)}
+.stat.due.has{border-color:rgba(255,107,122,.32)}
 
 /* ---------- 曲线 ---------- */
 .curve{padding:18px 20px 15px;border-radius:var(--r-l)}
@@ -600,7 +606,7 @@ body::before{
       <div class="hero-s" id="heroS">每天 20 个新词 · FSRS 算法自动安排复习</div>
       <div class="hero-btns">
         <button class="btn" id="btnNew">开始学新词</button>
-        <button class="btn mint" id="btnRev">复习 <span class="n" id="bRevN">0</span></button>
+        <button class="btn sec" id="btnRev">复习 <span class="n" id="bRevN">0</span></button>
       </div>
     </div>
   </div>
@@ -623,10 +629,10 @@ body::before{
       <input class="sync-code" id="syncCode" placeholder="点右侧生成，或输入已有同步码" autocomplete="off" spellcheck="false">
     </div>
     <div class="sync-btns">
-      <button class="btn ghost" id="btnGen">生成新码</button>
-      <button class="btn" id="btnPush">⬆ 上传进度</button>
-      <button class="btn mint" id="btnPull">⬇ 下载进度</button>
-      <button class="btn ghost" id="btnQR">显示二维码</button>
+      <button class="btn sec" id="btnGen">生成新码</button>
+      <button class="btn sec" id="btnPush">⬆ 上传进度</button>
+      <button class="btn sec" id="btnPull">⬇ 下载进度</button>
+      <button class="btn ghost" id="btnQR">二维码</button>
     </div>
     <div class="qr-box" id="qrBox"></div>
     <div class="sync-st" id="syncSt">尚未同步过。首次使用请在电脑端点「生成新码」。</div>
@@ -827,14 +833,37 @@ const ARTCOL={
   IELTS  :['#8B6BF0','#B9A4F6','#E8E1FD']
 };
 
-/* 生成一张内联 SVG 配图 */
-function artSVG(word, tag, size){
+/* 生成一张内联 SVG 配图
+   large=true 时（学习卡）加圆形舞台底 + 柔光，让图形有场景感与纵深，
+   而不是浮在空白上的几何色块；列表小图标保持极简 */
+function artSVG(word, tag, size, large){
   const key=artKeyFor(word);
   const col=ARTCOL[tag]||ARTCOL.IELTS;
   const body=(ART[key]||ART.abstract)
     .replace(/%A/g,col[0]).replace(/%B/g,col[1]).replace(/%C/g,col[2]);
   const s=size||100;
-  return '<svg viewBox="0 0 100 96" width="'+s+'" height="'+Math.round(s*0.96)+'" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+body+'</svg>';
+  const uid='a'+Math.random().toString(36).slice(2,8);
+  if(!large){
+    return '<svg viewBox="0 0 100 96" width="'+s+'" height="'+Math.round(s*0.96)+
+      '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+body+'</svg>';
+  }
+  return '<svg viewBox="-14 -16 128 128" width="'+s+'" height="'+s+
+    '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
+    '<defs>'+
+      '<radialGradient id="g'+uid+'" cx="50%" cy="38%" r="62%">'+
+        '<stop offset="0%" stop-color="'+col[0]+'" stop-opacity=".26"/>'+
+        '<stop offset="62%" stop-color="'+col[0]+'" stop-opacity=".07"/>'+
+        '<stop offset="100%" stop-color="'+col[0]+'" stop-opacity="0"/>'+
+      '</radialGradient>'+
+      '<linearGradient id="s'+uid+'" x1="0" y1="0" x2="0" y2="1">'+
+        '<stop offset="0%" stop-color="#FFFFFF" stop-opacity=".07"/>'+
+        '<stop offset="100%" stop-color="#FFFFFF" stop-opacity=".015"/>'+
+      '</linearGradient>'+
+    '</defs>'+
+    '<circle cx="50" cy="48" r="62" fill="url(#g'+uid+')"/>'+
+    '<circle cx="50" cy="48" r="52" fill="url(#s'+uid+')" stroke="'+col[0]+'" stroke-opacity=".18" stroke-width="1"/>'+
+    '<ellipse cx="50" cy="96" rx="34" ry="5" fill="#000" opacity=".26"/>'+
+    body+'</svg>';
 }
 </script>
 
@@ -1335,6 +1364,7 @@ function renderDash(){
   const dn = todayNewCount(), du = dueList().length, ms = masteredCount();
   document.getElementById('stNew').textContent  = dn;
   document.getElementById('stDue').textContent  = du;
+  document.querySelector('.stat.due').classList.toggle('has', du > 0);
   document.getElementById('stMast').textContent = ms;
   document.getElementById('stTot').textContent  = WORDS.length;
   document.getElementById('bRevN').textContent  = du;
@@ -1579,7 +1609,7 @@ function renderCard(){
         <div class="wph">${esc(w.ph)}</div>
         <button class="wspk" id="bSpk">🔊 朗读</button>
       </div>
-      <div class="wart">${artSVG(w.w, w.tag, 104)}</div>
+      <div class="wart">${artSVG(w.w, w.tag, 128, true)}</div>
       <div class="wbody">
         <div id="revealBox" class="${shown?'':'blur'}">
           ${mvHtml}
