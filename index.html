@@ -292,9 +292,9 @@ body{
 .wbody{flex:1 1 auto;min-height:0;overflow-y:auto;padding:16px 20px 20px;scroll-behavior:smooth}
 
 /* 大图区：百词斩最核心的视觉——图片占据卡片顶部大块面积 */
-.wart{
+.wart{min-height:196px;
   display:flex;align-items:center;justify-content:center;
-  padding:26px 0 18px;background:var(--blue-50);
+  padding:14px 0 12px;background:linear-gradient(180deg,#F5F8FF,var(--blue-50));
   border-bottom:1px solid var(--blue-100);position:relative
 }
 .wart svg{filter:drop-shadow(0 6px 14px rgba(43,92,230,.13));animation:artIn .45s cubic-bezier(.2,.9,.3,1.25)}
@@ -310,8 +310,8 @@ body{
 }
 .sub-badge{color:var(--ink-2);font-weight:800}
 .wword{
-  font-size:36px;font-weight:900;letter-spacing:-1.3px;line-height:1.1;
-  overflow-wrap:anywhere;color:var(--ink)
+  font-size:38px;font-weight:900;letter-spacing:-1.3px;line-height:1.1;
+  overflow-wrap:anywhere;color:#0F1419
 }
 .wph{
   font-size:14px;color:var(--ink-3);margin-top:6px;
@@ -508,7 +508,7 @@ body{
   .wcard{max-height:95vh;border-radius:22px}
   .wword{font-size:30px}
   .wtop{padding:16px 18px 12px}
-  .wart{padding:22px 0 15px}
+  .wart{padding:12px 0 10px;min-height:170px}
   .wbody{padding:14px 16px 18px}
   .rate{grid-template-columns:repeat(3,1fr);gap:7px;padding:12px 14px calc(14px + var(--sab))}
   .rb{font-size:12.5px;padding:12px 3px}
@@ -810,7 +810,7 @@ function artSVG(word, tag, size, large){
     return '<svg viewBox="0 0 100 96" width="'+s+'" height="'+Math.round(s*0.96)+
       '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+body+'</svg>';
   }
-  return '<svg viewBox="-14 -16 128 128" width="'+s+'" height="'+s+
+  return '<svg viewBox="-6 -8 112 116" width="'+s+'" height="'+s+
     '" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'+
     '<defs>'+
       '<radialGradient id="g'+uid+'" cx="50%" cy="38%" r="62%">'+
@@ -823,10 +823,10 @@ function artSVG(word, tag, size, large){
         '<stop offset="100%" stop-color="#FFFFFF" stop-opacity=".70"/>'+
       '</linearGradient>'+
     '</defs>'+
-    '<circle cx="50" cy="48" r="62" fill="url(#g'+uid+')"/>'+
-    '<circle cx="50" cy="48" r="52" fill="url(#s'+uid+')" stroke="'+col[0]+'" stroke-opacity=".24" stroke-width="1"/>'+
-    '<ellipse cx="50" cy="96" rx="34" ry="5" fill="'+col[0]+'" opacity=".14"/>'+
-    body+'</svg>';
+    '<circle cx="50" cy="46" r="58" fill="url(#g'+uid+')"/>'+
+    '<circle cx="50" cy="46" r="50" fill="url(#s'+uid+')" stroke="'+col[0]+'" stroke-opacity=".22" stroke-width="1.5"/>'+
+    '<ellipse cx="50" cy="101" rx="33" ry="4.5" fill="'+col[0]+'" opacity=".16"/>'+
+    '<g transform="translate(50,46) scale(1.28) translate(-50,-48)">'+body+'</g>'+'</svg>';
 }
 </script>
 
@@ -1567,7 +1567,7 @@ function renderCard(){
   // 百词斩式版式：大图在最上 -> 单词 -> 四选一，图文联想是其核心方法
   document.getElementById('mBox').innerHTML = `
     <div class="wcard">
-      <div class="wart">${artSVG(w.w, w.tag, 150, true)}</div>
+      <div class="wart">${artSVG(w.w, w.tag, 176, true)}</div>
       <div class="wtop t-${esc(w.tag)}">
         <div class="wtag">${esc(tagName)}${w.sub?`<span class="sub-badge">AWL ${w.sub}</span>`:''}</div>
         <div class="wword">${esc(w.w)}</div>
